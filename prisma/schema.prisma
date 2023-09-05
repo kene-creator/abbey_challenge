@@ -1,0 +1,67 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["base"]
+}
+
+model User {
+  id                   String     @id @default(uuid())
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+  email                String     @unique
+  hash                 String
+  emailToken           String?    @unique
+  resetToken           String?
+  resetTokenExpiresAt  DateTime?
+  emailvalid           Boolean?   @default(false)
+  firstName            String?
+  lastName             String?
+  failedSignInAttempts Int        @default(0)
+  roles                UserRole[] @default([USER])
+  refreshToken         String?
+  Bookmarks            Bookmark[]
+  partners             Partner[]
+
+  @@map("users")
+  @@schema("base")
+}
+
+model Bookmark {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  title       String
+  description String?
+  link        String
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@map("bookmarks")
+  @@schema("base")
+}
+
+model Partner {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  userId      String
+  description String
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@map("partners")
+  @@schema("base")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  MODERATOR
+
+  @@schema("base")
+}
