@@ -1,0 +1,20 @@
+scalar DateTime
+
+type Partner {
+  id: String!
+  name: String!
+  description: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Query {
+  getPartner(id: ID!): Partner
+  getAllPartners: [Partner!]!
+}
+
+type Mutation {
+  createPartner(name: String!, description: String!): Partner!
+  updatePartner(id: ID!, name: String!, description: String!): Partner!
+  deletePartner(id: ID!): Partner!
+}
