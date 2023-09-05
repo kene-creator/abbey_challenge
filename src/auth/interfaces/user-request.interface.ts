@@ -10,5 +10,6 @@ export interface UserRequest extends Request {
     updatedAt?: string;
     emailToken?: string | null;
     emailValid?: boolean | null;
+    refreshToken?: string | null;
   };
 }
